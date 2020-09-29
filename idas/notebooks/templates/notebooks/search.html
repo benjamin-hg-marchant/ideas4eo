@@ -1,0 +1,118 @@
+{% extends "notebooks/base.html" %}
+
+{% block title %} {{template_title}} {% endblock %}
+
+{% block local_css %}
+<style>
+
+
+.card-img-top {
+height:300px;
+}
+
+
+header.masthead {
+  margin-bottom: 30px;
+}
+
+.footer-bs {
+	margin-top: 60px;
+}
+</style>
+{% endblock %}
+
+{% block main_contents %}
+
+{% block header %}
+{% include "notebooks/header.html" %}
+{% endblock %}
+
+<div class="container">
+
+{% if messages %}
+{% for message in messages %}
+{% block alert_message %}{% include "blog/alert_message.html" %}{% endblock %}
+{% endfor %}
+{% endif %}
+
+      <!-- Page Heading/Breadcrumbs -->
+      <h1 class="mt-4 mb-3">Blog Home One
+        <small>Subheading</small>
+      </h1>
+
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="index.html">Home</a>
+        </li>
+        <li class="breadcrumb-item active">Blog Home 1</li>
+      </ol>
+
+	<div class="row">
+
+		<div class="col-12 col-lg-8">
+
+ {% for note_obj in PagList %}
+ 
+          <!-- Blog Post -->
+          <div class="card mb-4">
+            <img class="card-img-top" src="/media/photos/src/IMG_2617_vers3.jpg" alt="Card image cap">
+            <div class="card-body">
+              <h2 class="card-title">{{note_obj.article.title}}</h2>
+              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p>
+              <a href="/Travels/{{note_obj.article.url}}/" class="btn btn-info">Read More &rarr;</a>
+            </div>
+            <div class="card-footer text-muted">
+              Posted on January 1, 2017 by
+              <a href="#">Start Bootstrap</a>
+            </div>
+          </div>
+  
+          <!-- Blog Post -->
+          <div class="card mb-4">
+            <img class="card-img-top" src="/static/blog/photos/NY-Times_square_vu empire.jpg" alt="Card image cap">
+            <div class="card-body">
+              <h2 class="card-title">Escapades a New-York City</h2>
+              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p>
+              <a href="#" class="btn btn-info">Read More &rarr;</a>
+            </div>
+            <div class="card-footer text-muted">
+              Posted on January 1, 2017 by
+              <a href="#">Start Bootstrap</a>
+            </div>
+          </div>  
+  
+          <!-- Blog Post -->
+          <div class="card mb-4">
+            <img class="card-img-top" src="/static/blog/photos/IMG_20180103_175513_preview.jpeg" alt="Card image cap">
+            <div class="card-body">
+              <h2 class="card-title">Decouverte de Disney-World Florida (USA)</h2>
+              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p>
+              <a href="#" class="btn btn-info">Read More &rarr;</a>
+            </div>
+            <div class="card-footer text-muted">
+              Posted on January 1, 2017 by
+              <a href="#">Start Bootstrap</a>
+            </div>
+          </div>  
+  
+  {% endfor %}
+  
+		</div>
+
+		<div class="col-md-4">
+
+			<h5>À-propos</h5>
+ 
+			 <hr>
+
+			<p style="text-align:justify">Never in all their history have men been able truly to conceive of the world as one: a single sphere, a globe, having the qualities of a globe, a round earth in which all the directions eventually meet, in which there is no center because every point, or none, is center — an equal earth which all men occupy as equals. The airman's earth, if free men make it, will be truly round: a globe in practice, not in theory.</p>
+
+
+		</div>
+	   
+	</div>
+
+</div>
+
+
+{% endblock %}

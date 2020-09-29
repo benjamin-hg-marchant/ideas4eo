@@ -1,0 +1,13 @@
+{% load static %}
+
+{% block alert_message %}
+
+<div class="alert alert-info alert-dismissible mt-3" role="alert" style="text-align: justify;">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	<div class="Emergence-Article">	
+	{{ message|safe }}
+	</div>
+</div>
+
+{% endblock %}
+

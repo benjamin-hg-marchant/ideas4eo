@@ -1,0 +1,237 @@
+{% extends "notebooks/base.html" %}
+
+{% block title %} {{template_title}} {% endblock %}
+
+{% block local_css %}
+<style>
+
+
+.card-img-top {
+height:250px;
+}
+
+.portfolio-item {
+  margin-bottom: 30px;
+}
+
+#notebook_link_button:hover {
+	color: white;
+	text-decoration:none; 
+}
+
+</style>
+{% endblock %}
+
+{% block local_javascript %}
+<script>
+function get_filename(obj) {
+    var file = obj.value;
+    document.getElementById('selected_file_name').innerHTML=file.replace(/C:\\fakepath\\/i, '');
+}
+</script>
+{% endblock %}
+
+{% block main_contents %}
+
+{% block header %}
+{% include "notebooks/header.html" %}
+{% endblock %}
+
+<div class="container">
+
+{% if messages %}
+{% for message in messages %}
+{% block alert_message %}{% include "notebooks/alert_message.html" %}{% endblock %}
+{% endfor %}
+{% endif %}
+
+<div class="row mt-3 mb-4">
+
+	<div class="col-12 col-lg-9" style="min-height:1000px">
+
+		<div class="Emergence-Article" style="color:grey">
+			<p><i class="fa fa-picture-o"></i> Photos</p>
+			<hr>
+		</div>
+
+	{% if PagList %}
+		<div class="row">
+		{% for notebook_note_obj in PagList %}
+			<div class="col-lg-4 col-md-4 col-sm-6 portfolio-item">
+			  <div class="card h-100">
+				<span data-target="#myModal" data-toggle="modal">
+				<a data-slide-to="{{forloop.counter0}}" href="#myGallery">
+				<img class="card-img-top" src="/media/images/thumbnails_500_500/{{notebook_note_obj.note.image.url}}{{notebook_note_obj.note.image.format}}" alt="">
+				</a>
+				</span>
+				 <a href="/Images/{{notebook_note_obj.note.image.url}}/" class="btn btn-secondary btn-sm btn-block mt-3">View</a>		
+			  </div>
+			</div>
+		{% endfor %}
+		</div>
+	{% else %}
+
+	{% endif %}
+		
+	{% if display_paginator_navbar %}
+		<!-- Pagination -->
+		<ul class="pagination justify-content-center pt-5">
+		{% if PagList.has_previous %}
+		<li class="page-item">
+		  <a class="page-link" href="?page={{ PagList.previous_page_number }}" aria-label="Previous">
+			<span aria-hidden="true">&laquo;</span>
+			<span class="sr-only">Previous</span>
+		  </a>
+		</li>
+		{% endif %} 
+		{% if show_first %}
+		<li class="page-item">
+		  <a class="page-link" href="?page=1">1</a>
+		  <li><span class="ellipsis">...</span></li>
+		</li>
+		{% endif %} 
+		{% for pc in page_numbers %}  
+		<li class="page-item {% if pc == PagList.number %} active{% endif %}">
+		  <a class="page-link" href="?page={{ pc }}">{{ pc }}</a>
+		</li>
+		{% endfor %}
+		{% if show_last %}
+		<li class="page-item">
+		  <a class="page-link" href="?page={{paginator.num_pages}}">{{paginator.num_pages}}</a>
+		</li>
+		{% endif %}
+		{% if PagList.has_next %}
+		<li class="page-item">
+		  <a class="page-link" href="?page={{ PagList.next_page_number }}" aria-label="Next">
+			<span aria-hidden="true">&raquo;</span>
+			<span class="sr-only">Next</span>
+		  </a>
+		</li>
+		{% endif %} 
+		</ul>
+	{% endif %}
+
+	</div>
+  
+	<div class="col-md-3">
+
+		<div class="sticky-top">
+
+			<div class="Emergence-Article mt-0" style="color:grey">
+				<p><i class="fa fa-search"></i> Search</p>
+				<hr>
+			</div>
+			<form action="{{path_url}}" method="post">
+				{% csrf_token %}
+				<div class="form-group mt-3">
+					<input type="text" class="form-control border-lightgray btn-sm" placeholder="key words..." name="note_keywords" value="{{search_form.note_keywords.value|default_if_none:''}}">
+				</div> 
+				{% if is_owner %}
+					<div class="form-group mt-3">
+					<select class="form-control border-lightgray btn-sm" id="exampleFormControlSelect1" name="note_can_see" style="color:grey">
+						<option value=0 {% if search_form.note_can_see.value == 0 %}selected{% endif%}>All notes</option>
+						<option value=1 {% if search_form.note_can_see.value == 1 %}selected{% endif%}>Private notes</option>
+						<option value=2 {% if search_form.note_can_see.value == 2 %}selected{% endif%}>Public notes</option>
+					</select>
+					</div>
+				{% endif %}	
+				<input type="submit" class="form-control btn btn-secondary btn-send btn-block mt-3 btn-sm" name="start_search" value="Start">
+				<input type="submit" class="form-control btn btn-secondary btn-send btn-block mt-3 btn-sm" name="reset_search" value="Reset">
+			</form>
+
+
+			{% if is_owner %}
+			<div class="Emergence-Article mt-5" style="color:grey">
+				<p><i class="fa fa-upload"></i> Télécharger une image</p>
+				<hr>
+			</div>
+			<form action="{{path_url}}" method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+				<div class="form-group mt-3">
+					<div class="custom-file" id="customFile">
+						<input type="file" name="docfile" class="custom-file-input" id="exampleInputFile" aria-describedby="fileHelp" onchange="get_filename(this);">
+						<label class="custom-file-label btn-sm" for="exampleInputFile">
+							<span id="selected_file_name" style="color:grey;font-size: 14px;">Choisir une image... </span>
+						</label>
+					</div>
+				</div>
+				<div class="form-group mt-3">
+					<select class="form-control btn-sm" id="exampleFormControlSelect1" name="public" style="color:grey">
+						<option value=0 {% if form.public.value == 0 %}selected{% endif%}>Image privée</option>
+						<option value=1 {% if form.public.value == 1 %}selected{% endif%}>Image publique</option>
+					</select>
+				</div>
+				<div class="form-group mt-3">
+					<div class="Emergence-Article" style="color:grey; text-align:center;">
+						<label for="input_title">Description</label>						
+					</div>						
+					<textarea style="width:100%; max-width: 100%; height: 100px" class="form-control" id="content" name="content" >{{form.content.value|default_if_none:''}}</textarea>      
+				</div> 
+				<div class="form-group mt-3">
+					<div class="Emergence-Article" style="color:grey; text-align:center;">
+						<label for="input_title">Tags</label>						
+					</div>
+					<input type="text" class="form-control" style="font-size: 14px;" id="input_title" placeholder="" name="tags" value="{{form.tags.value|default_if_none:''}}">
+				</div> 
+				<input type="submit" class="btn btn-secondary btn-send btn-block mt-3" name="add_image" value="Submit">
+			</form>
+			{% endif %}	
+
+		</div>
+
+	</div>  
+  
+</div>
+
+<div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="myModal" role="dialog" tabindex="-1">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+	
+			<div class="modal-header">
+				<div class="pull-left ">
+					<div class="Emergence-Article" style="color:grey">
+					Photos
+					</div>
+				</div>
+				<button class="close" data-dismiss="modal" title="Close" type="button"><span class="glyphicon glyphicon-remove"></span></button>
+			</div>
+
+			<div class="modal-body"><!--begin carousel-->
+
+				<div id="myGallery" class="carousel slide" data-ride="carousel" data-interval="false">
+		  
+				  <div class="carousel-inner" role="listbox">
+					{% for notebook_note_obj in PagList %}
+					<div class="carousel-item {% if forloop.counter == 1 %} active {% endif %} ">
+					  <img class="d-block img-fluid" style="margin: 0 auto; max-height: 70vh;" alt="item" src="/media/images/thumbnails_1000_1000/{{notebook_note_obj.note.image.url}}{{notebook_note_obj.note.image.format}}" alt="Second slide">
+					</div>
+					{% endfor %}
+				  </div>
+				  <a class="carousel-control-prev" href="#myGallery" role="button" data-slide="prev">
+					<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+					<span class="sr-only">Previous</span>
+				  </a>
+				  <a class="carousel-control-next" href="#myGallery" role="button" data-slide="next">
+					<span class="carousel-control-next-icon" aria-hidden="true"></span>
+					<span class="sr-only">Next</span>
+				  </a>
+				</div>
+
+			<!--end modal-body-->
+			</div>
+	
+			<div class="modal-footer">
+				<button class="btn-sm close" data-dismiss="modal" type="button"><div class="Emergence-Article">Close</div></button>
+			</div>
+
+
+		<!--end modal-content-->
+		</div>
+	<!--end modal-dialoge-->
+	</div>
+<!--end myModal-->
+</div>
+
+</div>
+
+{% endblock %}

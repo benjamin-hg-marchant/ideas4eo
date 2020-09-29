@@ -1,0 +1,133 @@
+{% extends "notebooks/base.html" %}
+
+{% load i18n %}
+
+{% block title %} {{template_title}} {% endblock %}
+
+{% block local_css %}
+<style>
+
+textarea#content {
+	font-size: 14px;
+}
+
+</style>
+{% endblock %}
+
+{% block main_contents %}
+
+{% block header %}
+{% include "notebooks/header.html" %}
+{% endblock %}
+
+<div class="container">
+
+{% if messages %}
+{% for message in messages %}
+{% block alert_message %}{% include "notebooks/alert_message.html" %}{% endblock %}
+{% endfor %}
+{% endif %}
+
+<div class="row mb-4 mt-3">
+
+<div class="col-12 col-lg-8">
+
+	<div class="Emergence-Article" style="color:grey">
+		<p><i class="fa fa-pencil"></i> Edit</p>
+		<hr>
+	</div>
+
+	<form action="{{path_url}}" method="post">
+	{% csrf_token %}
+	
+		<div class="form-group mt-2">					
+			<input type="text" class="form-control" style="font-size: 14px;" id="input_title" placeholder="" name="title" value="{{form.title.value|default_if_none:''}}">
+			<small id="emailHelp" class="form-text text-muted"></small>
+		</div> 
+				
+		<div class="row">
+			<div class="col-md-4 mt-3">
+			  <div class="form-group">
+				<select class="form-control form-control-sm" id="exampleFormControlSelect1" name="public" style="color:grey">
+				  <option value=0 {% if not form.public %}selected{% endif%}>Private note</option>
+				  <option value=1 {% if form.public %}selected{% endif%}>Public note</option>
+				</select>
+			  </div>
+			</div>
+			<div class="col-md-4 mt-3">
+			  <div class="form-group">
+				<select class="form-control form-control-sm" id="exampleFormControlSelect1" name="comments" style="color:grey">
+				  <option value=0 {% if not form.comments %}selected{% endif%}>Comments: no</option>
+				  <option value=1 {% if form.comments %}selected{% endif%}>Comments: yes</option>
+				</select>
+			  </div>
+			</div>
+			<div class="col-md-4 mt-3">
+			  <div class="form-group">
+				<select class="form-control form-control-sm" id="exampleFormControlSelect1" name="language" style="color:grey">
+				  <option value=0 {% if form.language.value == 'fr' %}selected{% endif%}>French</option>
+				  <option value=1 {% if form.language.value == 'en' %}selected{% endif%}>English</option>
+				</select>
+			  </div>
+			</div>			
+		</div>
+		
+		<div class="form-group mt-3">		
+			<textarea style="width:100%; max-width: 100%; height: 600px" class="form-control" id="content" name="content" >{{form.content.value|default_if_none:''}}</textarea>
+		</div> 
+
+		<div class="form-group mt-4">					
+			<input type="text" class="form-control" style="font-size: 14px;" id="input_title" placeholder="Use ; to separate different tags" name="tags" value="{{form.tags.value|default_if_none:''}}">
+		</div> 
+
+		<input type="submit" class="form-control btn btn-secondary btn-send btn-block mt-5 btn-sm" name="edit_note" value="Submit">
+		
+	</form>
+
+</div>
+
+	<div class="col-md-4">
+
+		<div class="sticky-top">
+
+			<div class="Emergence-Article" style="color:grey">
+				<p><i class="fa fa-question-circle-o"></i> Aide</p>
+				<hr>
+			</div>
+			{% block user_guide_content_formatting %}
+			{% include "notebooks/user_guide_content_formatting.html" %}
+			{% endblock %}
+
+			<div class="Emergence-Article mt-4" style="color:grey">
+				<p><i class="fa fa-picture-o"></i> Header Image</p>
+				<hr>
+			</div>
+			<form action="{{path_url}}" method="post">
+			{% csrf_token %}
+				<div class="form-group mt-3">
+					<input type="text" class="form-control btn-sm" placeholder="Image url" name="url" value="">
+				</div> 
+				<input type="submit" class="form-control btn btn-secondary btn-send btn-block mt-3 btn-sm" name="header_image" value="Submit">
+			</form>
+
+			<div class="Emergence-Article mt-4" style="color:grey">
+				<p><i class="fa fa-trash-o"></i> Remove</p>
+				<hr>
+			</div>
+			<form action="{{path_url}}" method="post">
+			{% csrf_token %}
+				<div class="form-group mt-3">
+					<input type="text" class="form-control btn-sm" placeholder="Enter: remove" name="remove_text" value="">
+				</div> 
+				<input type="submit" class="form-control btn btn-secondary btn-send btn-block mt-3 btn-sm" name="remove_note" value="Submit">
+			</form>
+	
+		</div>
+	
+	</div>
+   
+</div>
+
+</div>
+
+{% endblock %}

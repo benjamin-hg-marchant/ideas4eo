@@ -1,0 +1,148 @@
+{% extends "notebooks/base.html" %}
+
+{% block title %} {{template_title}} {{note_obj.keywords}}  {% endblock %}
+
+{% block local_javascript %}
+<script>
+function get_filename(obj) {
+    var file = obj.value;
+    document.getElementById('selected_file_name').innerHTML=file.replace(/C:\\fakepath\\/i, '');
+}
+</script>
+{% endblock %}
+
+{% block main_contents %}
+
+<div class="container mt-3">
+
+{% if messages %}
+{% for message in messages %}
+{% block alert_message %}{% include "notebooks/alert_message.html" %}{% endblock %}
+{% endfor %}
+{% endif %}
+
+<div class="article_title">
+	<h1 class="mt-3 mb-3">URL: {{note_obj.image.url}} / Format: {{note_obj.image.format}}</h1>
+</div>
+
+<div class="row mb-4">
+
+	<div class="col-12 col-lg-8" style="min-height:0px">
+
+		<div class="Emergence-Article">
+			<p style="color:grey"> 
+			<i class="fa fa-user"></i>
+			<a href="/Notebooks/{{note_obj.notebook.url}}/">{{note_obj.notebook.user.username}}</a> 
+			<i class="fa fa-clock-o"></i> {{ note_obj.date_created|date:'F d, Y' }} 
+			</p>		
+			<hr>
+			<figure class="image" style="width:100%"> <span data-target="#myModal" data-toggle="modal">
+				<img class="card-img-top" src="/media/images/thumbnails_1000_1000/{{note_obj.image.url}}{{note_obj.image.format}}?lastmod={{note_obj.image.timestamp}}" alt=""></span>
+				<figcaption style="text-align:center; font-size: 13px; font-family: Yellowtail; color: #06a;">{{note_obj.abstract}}</figcaption>
+			</figure>
+		</div>
+		
+		{% if note_link_obj_list %}
+		<div class="Emergence-Article mt-5" style="color:grey; font-size: 14px;">
+			<i class="fa fa-link"></i> Link(s)
+		</div>
+		<hr>			
+		<div class="Emergence-Article" style="color:grey; font-size: 14px;">
+		{% for note_link_obj in note_link_obj_list %}
+			<div class="alert alert-light" role="alert" style="text-align:center;">
+				<a href="{{note_link_obj.note_01.note_full_path}}Images/">{{note_link_obj.note_01.article.title}}</a>
+			</div>				
+		{% endfor %}
+		</div>
+		{% endif %}	
+		
+		{% if tag_list %}
+		<div class="Emergence-Article mt-5" style="color:grey; font-size: 14px;">
+			<i class="fa fa-tags"></i> Tag(s)
+		</div>
+		<hr>
+		<div class="" style="text-align:center">
+		{% for tag in tag_list %}
+			{% if  tag %}
+			<a href="" class="btn btn-outline-info btn-sm mb-2">{{tag}}</a>
+			{% endif %}
+		{% endfor %}
+		</div>
+		{% endif %}	
+
+		{% if comment_list %}
+		<div class="Emergence-Article mt-5" style="color:grey; font-size: 14px;">
+			<i class="fa fa-comment"></i> Comments (0)
+		</div>
+		<hr>
+		{% endif %}	
+
+	</div>
+
+	<div class="col-md-4">
+		
+		<div class="sticky-top">
+			
+			<div class="Emergence-Article mt-0" style="color:grey; font-size: 14px;">
+				<i class="fa fa-bullhorn"></i> Google Ads
+			</div>
+			<hr>	
+			
+			{% if can_edit %}
+			<div class="Emergence-Article mt-5" style="color:grey">
+				<p><i class="fa fa-pencil"></i> Modifier l'image</p>
+				<hr>
+			</div>
+			<form action="{{path_url}}" method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+			<div class="form-group mt-3">
+				<div class="custom-file" id="customFile">
+					<input type="file" name="docfile" class="custom-file-input" id="exampleInputFile" aria-describedby="fileHelp" onchange="get_filename(this);">
+					<label class="custom-file-label btn-sm" for="exampleInputFile">
+						<span id="selected_file_name" style="color:grey;font-size: 14px;">Choisir une image... </span>
+					</label>
+				</div>
+			</div>
+			<div class="form-group mt-3">
+				<select class="form-control btn-sm" id="exampleFormControlSelect1" name="public" style="color:grey">
+					<option value=0 {% if not note_obj.public %}selected{% endif%}>Image privée</option>
+					<option value=1 {% if note_obj.public %}selected{% endif%}>Image publique</option>
+				</select>
+			</div>						
+			<div class="form-group mt-3">
+				<div class="Emergence-Article" style="color:grey; text-align:center;">
+					<label for="input_title">Description</label>						
+				</div>						
+				<textarea style="width:100%; max-width: 100%; height: 100px" class="form-control" id="content" name="content" >{{note_obj.abstract|default_if_none:''}}</textarea>      
+			</div> 
+			<div class="form-group mt-3">
+				<div class="Emergence-Article" style="color:grey; text-align:center;">
+					<label for="input_title">Tags</label>						
+				</div>
+				<input type="text" class="form-control" style="font-size: 14px;" id="input_title" placeholder="" name="tags" value="{{note_obj.keywords|default_if_none:''}}">
+			</div> 
+			<input type="submit" class="btn btn-secondary btn-send btn-block mt-3" name="edit_image" value="Submit">
+			</form>
+
+			<div class="Emergence-Article mt-4" style="color:grey">
+				<p><i class="fa fa-trash-o"></i> Remove</p>
+				<hr>
+			</div>
+			<form action="{{path_url}}" method="post">
+			{% csrf_token %}
+				<div class="form-group mt-3">
+					<input type="text" class="form-control border-info btn-sm" placeholder="Enter: remove" name="remove_text" value="">
+				</div> 
+				<input type="submit" class="btn btn-secondary btn-send btn-block mt-3" name="remove_image" value="Submit">
+			</form>
+			{% endif %}	
+			
+		</div>
+
+	</div>
+   
+</div>
+
+</div>
+
+{% endblock %}

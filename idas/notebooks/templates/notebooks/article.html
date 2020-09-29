@@ -1,0 +1,77 @@
+{% extends "notebooks/base.html" %}
+
+{% block title %} {{template_title}} {% endblock %}
+
+{% block local_css %}
+<style>
+
+.image {
+
+	width: 50%;
+	margin-left: auto;
+	margin-right: auto;
+
+	text-align: center;
+}
+
+.image {
+
+	width: 50%;
+	margin-left: auto;
+	margin-right: auto;
+
+	text-align: center;
+}
+
+</style>
+{% endblock %}
+
+{% block main_contents %}
+
+{% block header %}
+{% include "notebooks/header.html" %}
+{% endblock %}
+
+<div class="container mt-3">
+
+<!--
+<div class="article_title">
+	<h1 class="mt-3 mb-3">{{note_obj.article.title}}</h1>
+</div>
+--!>
+
+<div class="row mb-4">
+
+	<div class="col-12 col-lg-8">
+
+		<div class="Emergence-Article">
+		<p style="color:grey"> 
+		<i class="fa fa-user"></i>
+		<a href="/Notebooks/{{note_obj.notebook.url}}/">{{note_obj.notebook.user.username}}</a> 
+		<i class="fa fa-clock-o"></i> {{ note_obj.date_created|date:'F d, Y' }} 
+		</p>		
+		<hr>
+			{{note_obj.article.content_formatted|safe}}
+		</div>
+
+  
+	</div>
+
+	<div class="col-md-4">
+
+		<div class="sticky-top">
+		
+			<p style="color:grey; font-size: 14px;"> 
+				<i class="fa fa-bullhorn"></i> Google Ads
+			</p>
+			<hr>	
+
+		</div>
+
+	</div>
+   
+</div>
+
+</div>
+
+{% endblock %}

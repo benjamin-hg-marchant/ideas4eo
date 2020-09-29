@@ -1,0 +1,111 @@
+{% load static %}
+
+{% block user_guide_content_formatting %}
+
+<div class="Emergence-Article mt-0" style="color:grey">
+
+	<div class="mt-4 mb-4" id="accordion" role="tablist" aria-multiselectable="true">
+
+	<div class="card">
+	  <div class="card-header bg-secondary" role="tab" id="headingOne">
+		<p class="mb-0">
+		  <a style="color:white !important;" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Insert an image </a>
+		</p>
+	  </div>
+	  <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+		<div class="card-body">	 
+			<p>An image can be added in the text using the syntax</p>
+			<pre><code>[image: size: caption:]
+			</code></pre>
+			<p>where </p>
+			<ul>
+			<li>image is the unique url adress</li>
+			<li>size (optional) is the % image page width (between 10 and 100%)</li>
+			<li>and caption (optional)</li>
+			</ul>	
+		</div>
+	  </div>
+	</div>
+
+	<div class="card">
+	  <div class="card-header bg-secondary" role="tab" id="headingTwo">
+		<p class="mb-0">
+		  <a style="color:white !important;" class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">How to add a link ?</a>
+		</p>
+	  </div>
+	  <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
+		<div class="card-body">
+			<p>A external or internal link can be created using the syntax:</p>
+			<pre><code>[title](url)
+			</code></pre>
+			<p>External link example <a href="https://fr.wikipedia.org/wiki/Math%C3%A9matiques" target="_blank">article de wikipedia</a>:</p>
+			<pre><code>[article de wikipedia](https://fr.wikipedia.org/wiki/Math%C3%A9matiques)</code></pre>		
+			<p>Internal link example  <a href="/Articles/Comment-simplifier-une-fraction-Mathématiques/" target="_blank">Link</a></p>
+			<pre><code>[Link](/Articles/Comment-simplifier-une-fraction-Mathématiques/))</code></pre>			
+		</div>
+	  </div>
+	</div>
+
+	<div class="card">
+	  <div class="card-header bg-secondary" role="tab" id="headingThree">
+		<p class="mb-0">
+		  <a style="color:white !important;" class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">How to add organize your text ?</a>
+		</p>
+	  </div>
+	  <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree">
+		<div class="card-body">
+			<p>Content can be organized using headers:</p>
+	<pre><code># title lvl 1
+## title lvl 2
+### title lvl 3</code></pre>
+			<p>To add a table of content, just write in the text:</p>
+			<pre><code>[TOC]</code></pre>		
+			<p>where you want the table of content to be displayed.</p>
+		</div>
+	  </div>
+	</div>
+
+	<div class="card">
+	  <div class="card-header bg-secondary" role="tab" id="headingFour">
+		<p class="mb-0">
+		  <a style="color:white !important;" class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseThree">How to create a table ?</a>
+		</p>
+	  </div>
+	  <div id="collapseFour" class="collapse" role="tabpanel" aria-labelledby="headingFour">
+		<div class="card-body">
+			<p>A table can be created using the following syntax:</p>
+
+	<pre><code>header  |  header 
+------------- | -------------
+ text  |  text 
+ text  |  text</code></pre>
+
+			<table class="table table-striped">
+			<thead>
+			<tr>
+			<th>header</th>
+			<th>header</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr>
+			<td>text</td>
+			<td>text</td>
+			</tr>
+			<tr>
+			<td>text</td>
+			<td>text</td>
+			</tr>
+			</tbody>
+			</table>	
+	
+		</div>
+	  </div>
+	</div>
+
+	</div>
+
+</div>
+
+{% endblock %}
+

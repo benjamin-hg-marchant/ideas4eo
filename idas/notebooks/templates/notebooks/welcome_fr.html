@@ -1,0 +1,93 @@
+{% extends "notebooks/base.html" %}
+
+{% load i18n %}
+
+{% block title %} {{template_title}} {% endblock %}
+
+{% block local_css %}
+<style>
+
+</style>
+{% endblock %}
+
+{% block main_contents %}
+
+<div class="d-none d-md-block">
+<header class="masthead" style="background-image: url({{header_img_url}})">
+  <div class="overlay"></div>
+  <div class="container">
+	<div class="row">
+	 <div class="col-lg-{% if header_h1_text|length > 80 %}6{% else %}10{% endif %} col-md-10 mx-auto">
+		<div class="site-heading" style="padding-top:8%;word-break: keep-all; ">
+		<img class="card-img-top" src="/media/ideas4eo.png" alt="Card image cap" style="max-width: 350px;">
+		  <h1>{{header_h1_text|safe}}</h1>
+		  {% if header_h2_text %}
+		  <h2>{{header_h2_text|safe}}</h2>		
+		  {% endif %}
+			<div class="header_navbar">  
+				{% for item in header_navbar_01_button %}
+					<a class="btn btn-sm btn-light ml-3 {% if item.1 %}active{% endif %}" href="{{item.2}}" role="button" style='font-size: 12px;text-align:justify'>
+						{{item.3|safe}}
+					</a>
+				{% endfor %}
+			</div>	
+			<div class="header_navbar_2">  
+				{% for item in header_navbar_02_button %}
+					<a class="btn btn-sm btn-light ml-3 {% if item.1 %}active{% endif %}" href="{{item.2}}" role="button" style='font-size: 12px;text-align:justify'>
+						{{item.3}}
+					</a>
+				{% endfor %}
+			</div>									
+		</div>
+	  </div>
+	</div>
+  </div>
+</header>
+</div>
+
+<div class="container">
+
+{% if messages %}
+{% for message in messages %}
+{% block alert_message %}{% include "notebooks/alert_message.html" %}{% endblock %}
+{% endfor %}
+{% endif %}
+
+<div class="row">
+
+	<div class="col-12 col-lg-9" style="min-height:1000px">
+
+		<div class="Emergence-Article mt-3 mb-4" style="color:grey">
+			<p><p><i class="fa fa-newspaper-o"></i>  About</p>
+			<hr>
+			<p class="card-text">
+				
+			</p>
+		</div>
+
+	</div>
+	 
+	<div class="col-md-3 mt-3">
+
+
+
+		<div class="Emergence-Article mt-0" style="color:grey">
+			<p><i class="fa fa-search"></i> News</p>
+			<hr>
+		</div>
+		
+
+
+
+	</div>	 
+	   
+</div>
+
+</div>
+
+{% endblock %}
+
+
+
+
+

@@ -1,0 +1,270 @@
+{% extends "notebooks/base.html" %}
+
+{% block title %} {{title}} {% endblock %}
+
+{% block local_css %}
+<style>
+header.masthead {
+  margin-bottom: 30px;
+}
+
+.footer-bs {
+	margin-top: 60px;
+}
+
+.md-stepper-horizontal {
+	display:table;
+	width:100%;
+	margin:0 auto;
+	background-color:#FFFFFF;
+}
+.md-stepper-horizontal .md-step {
+	display:table-cell;
+	position:relative;
+	padding:24px;
+}
+.md-stepper-horizontal .md-step:active {
+	border-radius: 15% / 75%;
+}
+.md-stepper-horizontal .md-step:first-child:active {
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+}
+.md-stepper-horizontal .md-step:last-child:active {
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+}
+.md-stepper-horizontal .md-step:first-child .md-step-bar-left,
+.md-stepper-horizontal .md-step:last-child .md-step-bar-right {
+	display:none;
+}
+.md-stepper-horizontal .md-step .md-step-circle {
+	width:30px;
+	height:30px;
+	margin:0 auto;
+	background-color:#999999;
+	border-radius: 50%;
+	text-align: center;
+	line-height:30px;
+	font-size: 16px;
+	font-weight: 600;
+	color:#FFFFFF;
+}
+.md-stepper-horizontal.green .md-step.active .md-step-circle {
+	background-color:#00AE4D;
+}
+.md-stepper-horizontal.orange .md-step.active .md-step-circle {
+	background-color:#F96302;
+}
+.md-stepper-horizontal .md-step.active .md-step-circle {
+	background-color: rgb(33,150,243);
+}
+.md-stepper-horizontal .md-step.done .md-step-circle:before {
+	font-family:'FontAwesome';
+	font-weight:100;
+	content: "\f00c";
+}
+.md-stepper-horizontal .md-step.done .md-step-circle *,
+.md-stepper-horizontal .md-step.editable .md-step-circle * {
+	display:none;
+}
+.md-stepper-horizontal .md-step.editable .md-step-circle {
+	-moz-transform: scaleX(-1);
+	-o-transform: scaleX(-1);
+	-webkit-transform: scaleX(-1);
+	transform: scaleX(-1);
+}
+.md-stepper-horizontal .md-step.editable .md-step-circle:before {
+	font-family:'FontAwesome';
+	font-weight:100;
+	content: "\f040";
+}
+.md-stepper-horizontal .md-step .md-step-title {
+	margin-top:16px;
+	font-size:16px;
+	font-weight:600;
+}
+.md-stepper-horizontal .md-step .md-step-title,
+.md-stepper-horizontal .md-step .md-step-optional {
+	text-align: center;
+	color:rgba(0,0,0,.26);
+}
+.md-stepper-horizontal .md-step.active .md-step-title {
+	font-weight: 600;
+	color:rgba(0,0,0,.87);
+}
+.md-stepper-horizontal .md-step.active.done .md-step-title,
+.md-stepper-horizontal .md-step.active.editable .md-step-title {
+	font-weight:600;
+}
+.md-stepper-horizontal .md-step .md-step-optional {
+	font-size:12px;
+}
+.md-stepper-horizontal .md-step.active .md-step-optional {
+	color:rgba(0,0,0,.54);
+}
+.md-stepper-horizontal .md-step .md-step-bar-left,
+.md-stepper-horizontal .md-step .md-step-bar-right {
+	position:absolute;
+	top:36px;
+	height:1px;
+	border-top:1px solid #DDDDDD;
+}
+.md-stepper-horizontal .md-step .md-step-bar-right {
+	right:0;
+	left:50%;
+	margin-left:20px;
+}
+.md-stepper-horizontal .md-step .md-step-bar-left {
+	left:0;
+	right:50%;
+	margin-right:20px;
+}
+
+</style>
+{% endblock %}
+
+{% block main_contents %}
+
+{% block header %}
+{% include "notebooks/header.html" %}
+{% endblock %}
+
+<div class="container">
+
+{% if messages %}
+{% for message in messages %}
+{% block alert_message %}{% include "notebooks/alert_message.html" %}{% endblock %}
+{% endfor %}
+{% endif %}
+
+<div class="row justify-content-center">
+
+	<div class="col-md-7">
+
+		<div class="md-stepper-horizontal orange">
+			<div class="md-step {% if not form_part1_valid %}active{% endif %}">
+			  <div class="md-step-circle"><span>1</span></div>
+			  <div class="md-step-title">Inscription</div>
+			  <div class="md-step-bar-left"></div>
+			  <div class="md-step-bar-right"></div>
+			</div>
+			<div class="md-step {% if form_part1_valid %}active{% endif %}">
+			  <div class="md-step-circle"><span>2</span></div>
+			  <div class="md-step-title">Questions de sécurité</div>
+			  <div class="md-step-bar-left"></div>
+			  <div class="md-step-bar-right"></div>
+			</div>
+			<div class="md-step">
+			  <div class="md-step-circle"><span>3</span></div>
+			  <div class="md-step-title">Notebook</div>
+			  <div class="md-step-bar-left"></div>
+			  <div class="md-step-bar-right"></div>
+			</div>
+		</div>
+
+		<form action="/SignUp/" method="post">
+		{% csrf_token %}
+			
+			<input type="hidden" value="{{form_part}}" name="form_part">
+			
+			<div {% if form_part1_valid %} style="display: none;" {% endif %}>
+				<br>
+				<div class="form-group mt-3">
+				<label for="e1" style="color:grey">Prénom</label>
+				<input type="text" class="form-control" style="font-size: 14px;" id="e1" placeholder="" name="first_name" value="{{SignUp_form.first_name.value|default_if_none:''}}" required>
+				</div>
+				<div class="form-group">
+				<label for="e2" style="color:grey">Nom</label>
+				<input type="text" class="form-control" style="font-size: 14px;" id="e2" placeholder="" name="last_name" value="{{SignUp_form.last_name.value|default_if_none:''}}" required>
+				</div>	
+				<div class="form-group">
+				<label for="e4" style="color:grey">Nom d'utilisateur</label>
+				<input type="text" class="form-control" style="font-size: 14px;" id="e4" placeholder="" name="username" value="{{SignUp_form.username.value|default_if_none:''}}" required>
+				</div>	
+				<div class="form-group">
+				<label for="e3" style="color:grey">Adresse email</label>
+				<input type="email" class="form-control" style="font-size: 14px;" id="e3" placeholder="" name="email" value="{{SignUp_form.email.value|default_if_none:''}}" required>
+				</div>	
+				<div class="form-group">
+				<label for="e5" style="color:grey">Mot de passe</label>
+				<input type="password" class="form-control" style="font-size: 14px;" id="e5" placeholder="" name="password1" value="{{SignUp_form.password1.value|default_if_none:''}}" required>
+				</div>
+				<div class="form-group">
+				<label for="e6" style="color:grey">Mot de passe (confirmation)</label>
+				<input type="password" class="form-control" style="font-size: 14px;" id="e6" placeholder="" name="password2" value="{{SignUp_form.password2.value|default_if_none:''}}" required>
+				</div>		
+				<div id='div_id_address' class="{{SignUp_form.honeypot_class}}">
+				<label for="e7">Address</label>
+				<input type="password" class="{{SignUp_form.honeypot_class}}" id="e7" placeholder="Address"  name="address">
+				</div>
+				<div id='div_id_phone' class="{{SignUp_form.honeypot_class}}">
+				<label for="e8">Phone</label>
+				<input type="password" class="{{SignUp_form.honeypot_class}}" id="e8" placeholder="Phone" name="phone">
+				</div>	
+			</div>
+			
+			{% if form_part1_valid %}
+			
+			<div class="Emergence-Article mt-3 mb-4">	
+				<p>
+				Pour sécuriser votre notebook veuillez sélectionner puis répondre à trois questions. Ces questions 
+				et votre adresse email pourront, par exemple, être utilisés pour re-initialiser votre mot de passe en cas d'oubli.
+				</p>
+			</div>
+			
+				<div class="form-group mt-3">
+				<label for="e1" style="font-size:14px;color:grey">Question 1</label>
+				<select class="form-control btn-sm" id="exampleFormControlSelect1" name="security_question_1" style="font-size:14px;color:grey">
+				  <option value=0 {% if form.security_question_1.value == 0 %}selected{% endif%}>Quel est le prénom de votre meilleur ami d’enfance?</option>
+				  <option value=1 {% if form.security_question_1.value == 1 %}selected{% endif%}>Dans quelle ville était votre premier emploi?</option>
+				  <option value=2 {% if form.security_question_1.value == 2 %}selected{% endif%}>Quel est votre sport préféré ?</option>
+				</select>
+				</div>
+				<div class="form-group mt-3">
+				<label for="e1" style="font-size:14px;color:grey">Réponse 1</label>
+				<input type="text" class="form-control" style="font-size: 14px;" id="e1" placeholder="" name="security_answer_1" value="{{SignUp_form.security_answer_1.value|default_if_none:''}}">
+				</div>
+
+				<div class="form-group mt-5">
+				<label for="e1" style="font-size:14px;color:grey">Question 2</label>
+				<select class="form-control btn-sm" id="exampleFormControlSelect1" name="security_question_2" style="font-size:14px;color:grey">
+				  <option value=0 {% if form.security_question_2.value == 0 %}selected{% endif%}>Dans quelle ville est née votre mère?</option>
+				  <option value=1 {% if form.security_question_2.value == 1 %}selected{% endif%}>Quelle était la marque de votre première voiture ?</option>
+				  <option value=2 {% if form.security_question_2.value == 2 %}selected{% endif%}>Quel était votre plat préféré dans votre enfance ?</option>
+				</select>
+				</div>
+				<div class="form-group mt-3">
+				<label for="e1" style="font-size:14px;color:grey">Réponse 2</label>
+				<input type="text" class="form-control" style="font-size: 14px;" id="e1" placeholder="" name="security_answer_2" value="{{SignUp_form.security_answer_2.value|default_if_none:''}}">
+				</div>
+				
+				<div class="form-group mt-5">
+				<label for="e1" style="font-size:14px;color:grey">Question 3</label>
+				<select class="form-control btn-sm" id="exampleFormControlSelect1" name="security_question_3" style="font-size:14px;color:grey">
+				  <option value=0 {% if form.security_question_3.value == 0 %}selected{% endif%}>Dans quelle rue avez-vous grandi?</option>
+				  <option value=1 {% if form.security_question_3.value == 1 %}selected{% endif%}>Quel est votre genre de musique préféré?</option>
+				  <option value=2 {% if form.security_question_3.value == 2 %}selected{% endif%}>Qui était votre héros d'enfance?</option>
+				</select>
+				</div>
+				<div class="form-group mt-3 mb-3">
+				<label for="e1" style="font-size:14px;color:grey">Réponse 3</label>
+				<input type="text" class="form-control" style="font-size: 14px;" id="e1" placeholder="" name="security_answer_3" value="{{SignUp_form.security_answer_3.value|default_if_none:''}}">
+				</div>										
+			{% endif %}
+
+			<br>	
+			<div class="row">		  
+				<div class="col-md-12">
+					<input type="submit" class="btn btn-secondary btn-send btn-block" name="SignUp_Form" value="Soumettre">
+				</div>
+			</div>
+		</form>
+	
+	</div>
+
+</div>
+
+</div>
+
+{% endblock %}
