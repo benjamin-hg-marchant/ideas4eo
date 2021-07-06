@@ -1,0 +1,9 @@
+# ignore all .files and . folders
+.*
+
+#except
+!/.gitignore
+
+# ignore __pycache__ folders
+__pycache__/
+
