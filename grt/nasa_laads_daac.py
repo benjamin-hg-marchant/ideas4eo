@@ -30,9 +30,12 @@ def create_reperestory(media_path,product,collection,year,month,day):
 
     if not os.path.exists("{}/{}/{}".format(media_path,product,collection)):
         os.system("mkdir {}/{}/{}".format(media_path,product,collection))
+
+    if not os.path.exists("{}/{}/{}/{}".format(media_path,product,collection,year)):
+        os.system("mkdir {}/{}/{}/{}".format(media_path,product,collection,year))
     
-    if not os.path.exists("{}/{}/{}/{}_{}_{}".format(media_path,product,collection,year,month,day)):
-        os.system("mkdir {}/{}/{}/{}_{}_{}".format(media_path,product,collection,year,month,day))
+    if not os.path.exists("{}/{}/{}/{}/{}_{}_{}".format(media_path,product,collection,year,year,month,day)):
+        os.system("mkdir {}/{}/{}/{}/{}_{}_{}".format(media_path,product,collection,year,year,month,day))
         
     return None
 
@@ -124,7 +127,7 @@ def get_file(product,collection,year,month,day,hour,minute):
         
         if media_path !=-1: 
         
-            file_path = "{}/{}/{}/{}_{}_{}/{}".format(media_path,product,collection,year,month,day,file_name)
+            file_path = "{}/{}/{}/{}/{}_{}_{}/{}".format(media_path,product,collection,year,year,month,day,file_name)
         
             if not path.exists(file_path):
             
